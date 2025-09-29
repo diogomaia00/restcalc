@@ -1,2 +1,9 @@
 services:
-  
+  app:
+    build: .  # Usa o Dockerfile local
+    ports:
+      - "8080:8080"
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
