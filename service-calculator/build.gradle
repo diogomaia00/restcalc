@@ -1,0 +1,6 @@
+description = 'Calculator service for performing calculations'
+
+// Calculator service doesn't need web starter, just Kafka
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}

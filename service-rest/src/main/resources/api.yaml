@@ -1,0 +1,173 @@
+openapi: 3.1.0
+info:
+  title: RESTful API calculator
+  description: API must support add sub mul div of 2 operands
+  version: 0.0.0
+paths:
+  /sub:
+    get:
+      operationId: subtractionOperation
+      summary: Subtraction operation
+      responses:
+        "200":
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  op1:
+                    type: number
+                    format: double
+                  op2:
+                    type: number
+                    format: double
+                required:
+                  - op1
+                  - op2
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        "500":
+          $ref: "#/components/responses/InternalServerErrror"
+      parameters: []
+      description: |
+        Subtraction operation for 2 numbers (int or float)
+  /add:
+    get:
+      operationId: additionOperation
+      summary: Addition operation
+      responses:
+        "200":
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  op1:
+                    type: number
+                    format: double
+                  op2:
+                    type: number
+                    format: double
+                required:
+                  - op1
+                  - op2
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        "500":
+          $ref: "#/components/responses/InternalServerErrror"
+      parameters: []
+      description: Addition operation for 2 numbers (int or float)
+  /mul:
+    get:
+      operationId: multiplicationOperation
+      summary: Multiplication operation
+      responses:
+        "200":
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  op1:
+                    type: number
+                    format: double
+                  op2:
+                    type: number
+                    format: double
+                required:
+                  - op1
+                  - op2
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        "500":
+          $ref: "#/components/responses/InternalServerErrror"
+      parameters: []
+      description: Multiplication operation for 2 numbers (int or float)
+  /div:
+    get:
+      operationId: divisionOperation
+      summary: Division operation
+      responses:
+        "200":
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  op1:
+                    type: number
+                    format: double
+                  op2:
+                    type: number
+                    format: double
+                required:
+                  - op1
+                  - op2
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        "500":
+          $ref: "#/components/responses/InternalServerErrror"
+      parameters: []
+      description: Division operation for 2 numbers (int or float)
+components:
+  responses:
+    InternalServerErrror:
+      description: The server encountered an unexpected condition that prevented it
+        from fulfilling the request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+              - message

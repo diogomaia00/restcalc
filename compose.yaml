@@ -1,14 +1,28 @@
 services:
 
-  # containers that will run 
-  app:
-    build: .  # uses local Dockerfile
-    hostname: calculator-host 
-    container_name: calculator-container 
+  # REST service - handles HTTP requests
+  rest-service:
+    build:
+      context: .
+      dockerfile: service-rest/Dockerfile
+    hostname: rest-service-host
+    container_name: rest-service-container
     depends_on:
       - kafka
     ports:
       - "8080:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-host:9092
+
+  # Calculator service - performs calculations
+  calculator-service:
+    build:
+      context: .
+      dockerfile: service-calculator/Dockerfile
+    hostname: calculator-service-host
+    container_name: calculator-service-container
+    depends_on:
+      - kafka
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-host:9092
 
