@@ -16,5 +16,4 @@ RESTful API that provides the basic functionalities of a calculator
 ./gradlew clean build
 
 # Run 
-./gradlew bootRun
-
+docker compose up
