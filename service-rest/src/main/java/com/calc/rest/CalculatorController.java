@@ -1,6 +1,5 @@
 package com.calc.rest;
 
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,39 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.calc.rest.dto.CalculationResponse;
 import com.calc.rest.service.CalculatorKafkaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "Calculator", description = "RESTful Calculator API for basic arithmetic operations")
 public class CalculatorController {
     
     @Autowired
     private CalculatorKafkaService calculatorService;
 
     @GetMapping("/add")
+    @Operation(
+        summary = "Addition operation", 
+        description = "Performs addition of two numbers (op1 + op2)"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Addition completed successfully",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"result\": 3.8}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Invalid parameters\"}"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<Map<String, Object>> addition(
+        @Parameter(description = "First operand", example = "1.5", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
+        @Parameter(description = "Second operand", example = "2.3", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "add");
@@ -36,8 +59,21 @@ public class CalculatorController {
     }
 
     @GetMapping("/sub")
+    @Operation(
+        summary = "Subtraction operation", 
+        description = "Performs subtraction of two numbers (op1 - op2)"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Subtraction completed successfully",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"result\": 7.3}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<Map<String, Object>> subtraction(
+        @Parameter(description = "First operand (minuend)", example = "10.5", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
+        @Parameter(description = "Second operand (subtrahend)", example = "3.2", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "sub");
@@ -50,8 +86,21 @@ public class CalculatorController {
     }
 
     @GetMapping("/mul")
+    @Operation(
+        summary = "Multiplication operation", 
+        description = "Performs multiplication of two numbers (op1 * op2)"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Multiplication completed successfully",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"result\": 10.0}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<Map<String, Object>> multiplication(
+        @Parameter(description = "First operand (multiplicand)", example = "4.0", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
+        @Parameter(description = "Second operand (multiplier)", example = "2.5", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "mul");
@@ -64,8 +113,23 @@ public class CalculatorController {
     }
 
     @GetMapping("/div")
+    @Operation(
+        summary = "Division operation", 
+        description = "Performs division of two numbers (op1 / op2). Note: op2 cannot be zero."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Division completed successfully",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"result\": 5.0}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters or division by zero",
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Division by zero is not allowed\"}"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<Map<String, Object>> division(
+        @Parameter(description = "First operand (dividend)", example = "15.0", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
+        @Parameter(description = "Second operand (divisor) - cannot be zero", example = "3.0", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "div");

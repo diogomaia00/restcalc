@@ -1,173 +1,200 @@
 openapi: 3.1.0
 info:
-  title: RESTful API calculator
-  description: API must support add sub mul div of 2 operands
-  version: 0.0.0
+  title: RESTful API Calculator
+  description: A microservices-based calculator API that supports basic arithmetic operations (addition, subtraction, multiplication, division) with arbitrary precision for two operands.
+  version: 1.0.0
+  contact:
+    name: Calculator API Support
+    email: support@calculator-api.com
+servers:
+  - url: http://localhost:8080
+    description: Local development server
 paths:
   /sub:
     get:
       operationId: subtractionOperation
       summary: Subtraction operation
+      description: Performs subtraction of two numbers (op1 - op2)
+      parameters:
+        - name: op1
+          in: query
+          required: true
+          description: First operand (minuend)
+          schema:
+            type: number
+            format: double
+          example: 10.5
+        - name: op2
+          in: query
+          required: true
+          description: Second operand (subtrahend)
+          schema:
+            type: number
+            format: double
+          example: 3.2
       responses:
         "200":
-          description: The request was successful, and the server has returned the
-            requested resource in the response body.
+          description: Subtraction operation completed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  op1:
-                    type: number
-                    format: double
-                  op2:
-                    type: number
-                    format: double
-                required:
-                  - op1
-                  - op2
-        "403":
-          description: The server understood the request, but refuses to authorize it.
-            Ensure the client has appropriate permissions.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
+                $ref: '#/components/schemas/CalculationResult'
+              example:
+                result: 7.3
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "500":
-          $ref: "#/components/responses/InternalServerErrror"
-      parameters: []
-      description: |
-        Subtraction operation for 2 numbers (int or float)
+          $ref: "#/components/responses/InternalServerError"
   /add:
     get:
       operationId: additionOperation
       summary: Addition operation
+      description: Performs addition of two numbers (op1 + op2)
+      parameters:
+        - name: op1
+          in: query
+          required: true
+          description: First operand
+          schema:
+            type: number
+            format: double
+          example: 1.5
+        - name: op2
+          in: query
+          required: true
+          description: Second operand
+          schema:
+            type: number
+            format: double
+          example: 2.3
       responses:
         "200":
-          description: The request was successful, and the server has returned the
-            requested resource in the response body.
+          description: Addition operation completed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  op1:
-                    type: number
-                    format: double
-                  op2:
-                    type: number
-                    format: double
-                required:
-                  - op1
-                  - op2
-        "403":
-          description: The server understood the request, but refuses to authorize it.
-            Ensure the client has appropriate permissions.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
+                $ref: '#/components/schemas/CalculationResult'
+              example:
+                result: 3.8
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "500":
-          $ref: "#/components/responses/InternalServerErrror"
-      parameters: []
-      description: Addition operation for 2 numbers (int or float)
+          $ref: "#/components/responses/InternalServerError"
   /mul:
     get:
       operationId: multiplicationOperation
       summary: Multiplication operation
+      description: Performs multiplication of two numbers (op1 * op2)
+      parameters:
+        - name: op1
+          in: query
+          required: true
+          description: First operand (multiplicand)
+          schema:
+            type: number
+            format: double
+          example: 4.0
+        - name: op2
+          in: query
+          required: true
+          description: Second operand (multiplier)
+          schema:
+            type: number
+            format: double
+          example: 2.5
       responses:
         "200":
-          description: The request was successful, and the server has returned the
-            requested resource in the response body.
+          description: Multiplication operation completed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  op1:
-                    type: number
-                    format: double
-                  op2:
-                    type: number
-                    format: double
-                required:
-                  - op1
-                  - op2
-        "403":
-          description: The server understood the request, but refuses to authorize it.
-            Ensure the client has appropriate permissions.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
+                $ref: '#/components/schemas/CalculationResult'
+              example:
+                result: 10.0
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "500":
-          $ref: "#/components/responses/InternalServerErrror"
-      parameters: []
-      description: Multiplication operation for 2 numbers (int or float)
+          $ref: "#/components/responses/InternalServerError"
   /div:
     get:
       operationId: divisionOperation
       summary: Division operation
+      description: Performs division of two numbers (op1 / op2)
+      parameters:
+        - name: op1
+          in: query
+          required: true
+          description: First operand (dividend)
+          schema:
+            type: number
+            format: double
+          example: 15.0
+        - name: op2
+          in: query
+          required: true
+          description: Second operand (divisor) - cannot be zero
+          schema:
+            type: number
+            format: double
+            minimum: -999999999
+            maximum: 999999999
+            not:
+              const: 0
+          example: 3.0
       responses:
         "200":
-          description: The request was successful, and the server has returned the
-            requested resource in the response body.
+          description: Division operation completed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  op1:
-                    type: number
-                    format: double
-                  op2:
-                    type: number
-                    format: double
-                required:
-                  - op1
-                  - op2
-        "403":
-          description: The server understood the request, but refuses to authorize it.
-            Ensure the client has appropriate permissions.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
+                $ref: '#/components/schemas/CalculationResult'
+              example:
+                result: 5.0
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "500":
-          $ref: "#/components/responses/InternalServerErrror"
-      parameters: []
-      description: Division operation for 2 numbers (int or float)
+          $ref: "#/components/responses/InternalServerError"
+
 components:
+  schemas:
+    CalculationResult:
+      type: object
+      description: Successful calculation result
+      properties:
+        result:
+          type: number
+          format: double
+          description: The result of the calculation
+          example: 42.5
+      required:
+        - result
+    
+    ErrorResponse:
+      type: object
+      description: Error response when operation fails
+      properties:
+        message:
+          type: string
+          description: Error message describing what went wrong
+          example: "Division by zero is not allowed"
+      required:
+        - message
+
   responses:
-    InternalServerErrror:
-      description: The server encountered an unexpected condition that prevented it
-        from fulfilling the request.
+    BadRequest:
+      description: Bad request - invalid parameters or operation cannot be performed
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-              - message
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Division by zero is not allowed"
+    
+    InternalServerError:
+      description: Internal server error - unexpected condition occurred
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "An unexpected error occurred while processing the request"
