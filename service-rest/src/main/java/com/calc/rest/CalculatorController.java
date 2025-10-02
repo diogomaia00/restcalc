@@ -16,8 +16,10 @@ import com.calc.rest.service.CalculatorKafkaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,12 +39,18 @@ public class CalculatorController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Addition completed successfully",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
                 examples = @ExampleObject(value = "{\"result\": 3.8}"))),
         @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
                 examples = @ExampleObject(value = "{\"message\": \"Invalid parameters\"}"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")))
     })
     public ResponseEntity<Map<String, Object>> addition(
         @Parameter(description = "First operand", example = "1.5", required = true)
@@ -52,9 +60,12 @@ public class CalculatorController {
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "add");
         if (response.isSuccess()) {
-            return ResponseEntity.ok(Map.of("result", response.getResult()));
+            return ResponseEntity.ok()
+                .header("request-ID", response.getRequestId())
+                .body(Map.of("result", response.getResult()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("request-ID", response.getRequestId())
                 .body(Map.of("message", response.getErrorMessage()));
         }
     }
@@ -80,9 +91,12 @@ public class CalculatorController {
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "sub");
         if (response.isSuccess()) {
-            return ResponseEntity.ok(Map.of("result", response.getResult()));
+            return ResponseEntity.ok()
+                .header("request-ID", response.getRequestId())
+                .body(Map.of("result", response.getResult()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("request-ID", response.getRequestId())
                 .body(Map.of("message", response.getErrorMessage()));
         }
     }
@@ -108,9 +122,12 @@ public class CalculatorController {
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "mul");
         if (response.isSuccess()) {
-            return ResponseEntity.ok(Map.of("result", response.getResult()));
+            return ResponseEntity.ok()
+                .header("request-ID", response.getRequestId())
+                .body(Map.of("result", response.getResult()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("request-ID", response.getRequestId())
                 .body(Map.of("message", response.getErrorMessage()));
         }
     }
@@ -138,9 +155,12 @@ public class CalculatorController {
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "div");
         if (response.isSuccess()) {
-            return ResponseEntity.ok(Map.of("result", response.getResult()));
+            return ResponseEntity.ok()
+                .header("request-ID", response.getRequestId())
+                .body(Map.of("result", response.getResult()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .header("request-ID", response.getRequestId())
                 .body(Map.of("message", response.getErrorMessage()));
         }
     }
@@ -150,8 +170,10 @@ public class CalculatorController {
     public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         
         String message = String.format("Invalid value '%s' for parameter '%s'. Expected a valid number.", ex.getValue(), ex.getName());
+        String errorRequestId = java.util.UUID.randomUUID().toString();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .header("request-ID", errorRequestId)
             .body(Map.of("message", message));
     }
 }

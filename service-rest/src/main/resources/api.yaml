@@ -8,7 +8,7 @@ info:
     email: support@calculator-api.com
 servers:
   - url: http://localhost:8080
-    description: Local development server
+    description: Local server
 paths:
   /sub:
     get:
@@ -19,7 +19,7 @@ paths:
         - name: op1
           in: query
           required: true
-          description: First operand (minuend)
+          description: First operand
           schema:
             type: number
             format: double
@@ -27,7 +27,7 @@ paths:
         - name: op2
           in: query
           required: true
-          description: Second operand (subtrahend)
+          description: Second operand
           schema:
             type: number
             format: double
@@ -35,6 +35,13 @@ paths:
       responses:
         "200":
           description: Subtraction operation completed successfully
+          headers:
+            request-ID:
+              description: Unique identifier for this specific request
+              schema:
+                type: string
+                format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
           content:
             application/json:
               schema:
@@ -70,6 +77,13 @@ paths:
       responses:
         "200":
           description: Addition operation completed successfully
+          headers:
+            request-ID:
+              description: Unique identifier for this specific request
+              schema:
+                type: string
+                format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
           content:
             application/json:
               schema:
@@ -89,7 +103,7 @@ paths:
         - name: op1
           in: query
           required: true
-          description: First operand (multiplicand)
+          description: First operand
           schema:
             type: number
             format: double
@@ -97,7 +111,7 @@ paths:
         - name: op2
           in: query
           required: true
-          description: Second operand (multiplier)
+          description: Second operand
           schema:
             type: number
             format: double
@@ -105,6 +119,13 @@ paths:
       responses:
         "200":
           description: Multiplication operation completed successfully
+          headers:
+            request-ID:
+              description: Unique identifier for this specific request
+              schema:
+                type: string
+                format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
           content:
             application/json:
               schema:
@@ -124,7 +145,7 @@ paths:
         - name: op1
           in: query
           required: true
-          description: First operand (dividend)
+          description: First operand
           schema:
             type: number
             format: double
@@ -144,6 +165,13 @@ paths:
       responses:
         "200":
           description: Division operation completed successfully
+          headers:
+            request-ID:
+              description: Unique identifier for this specific request
+              schema:
+                type: string
+                format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
           content:
             application/json:
               schema:
@@ -183,6 +211,13 @@ components:
   responses:
     BadRequest:
       description: Bad request - invalid parameters or operation cannot be performed
+      headers:
+        request-ID:
+          description: Unique identifier for this specific request
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
       content:
         application/json:
           schema:
@@ -192,6 +227,13 @@ components:
     
     InternalServerError:
       description: Internal server error - unexpected condition occurred
+      headers:
+        request-ID:
+          description: Unique identifier for this specific request
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
       content:
         application/json:
           schema:
