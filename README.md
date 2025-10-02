@@ -110,28 +110,28 @@ Once the services are running, the REST API will be available at `http://localho
 
 ### Available Endpoints
 
-- **Addition**: `GET /add?a={number1}&b={number2}`
-- **Subtraction**: `GET /sub?a={number1}&b={number2}`
-- **Multiplication**: `GET /mul?a={number1}&b={number2}`
-- **Division**: `GET /div?a={number1}&b={number2}`
+- **Addition**: `GET /add?op1={number1}&op2={number2}`
+- **Subtraction**: `GET /sub?op1={number1}&op2={number2}`
+- **Multiplication**: `GET /mul?op1={number1}&op2={number2}`
+- **Division**: `GET /div?op1={number1}&op2={number2}`
 
 ### Example Requests
 
 ```bash
 # Addition: 1 + 2
-curl "http://localhost:8080/add?a=1&b=2"
+curl "http://localhost:8080/add?op1=1&op2=2"
 # Response: {"result": 3}
 
 # Subtraction: 10 - 3
-curl "http://localhost:8080/sub?a=10&b=3"
+curl "http://localhost:8080/sub?op1=10&op2=3"
 # Response: {"result": 7}
 
 # Multiplication: 4 * 5
-curl "http://localhost:8080/mul?a=4&b=5"
+curl "http://localhost:8080/mul?op1=4&op2=5"
 # Response: {"result": 20}
 
 # Division: 15 / 3
-curl "http://localhost:8080/div?a=15&b=3"
+curl "http://localhost:8080/div?op1=15&op2=3"
 # Response: {"result": 5}
 ```
 
