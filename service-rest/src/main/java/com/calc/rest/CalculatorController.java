@@ -29,6 +29,7 @@ public class CalculatorController {
     @Autowired
     private CalculatorKafkaService calculatorService;
 
+    // ADDICTION
     @GetMapping("/add")
     @Operation(
         summary = "Addition operation", 
@@ -58,6 +59,7 @@ public class CalculatorController {
         }
     }
 
+    // SUBTRACTION
     @GetMapping("/sub")
     @Operation(
         summary = "Subtraction operation", 
@@ -71,9 +73,9 @@ public class CalculatorController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<Map<String, Object>> subtraction(
-        @Parameter(description = "First operand (minuend)", example = "10.5", required = true)
+        @Parameter(description = "First operand", example = "10.5", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
-        @Parameter(description = "Second operand (subtrahend)", example = "3.2", required = true)
+        @Parameter(description = "Second operand", example = "3.2", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "sub");
@@ -85,6 +87,7 @@ public class CalculatorController {
         }
     }
 
+    // MULTIPLICATION
     @GetMapping("/mul")
     @Operation(
         summary = "Multiplication operation", 
@@ -98,9 +101,9 @@ public class CalculatorController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<Map<String, Object>> multiplication(
-        @Parameter(description = "First operand (multiplicand)", example = "4.0", required = true)
+        @Parameter(description = "First operand", example = "4.0", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
-        @Parameter(description = "Second operand (multiplier)", example = "2.5", required = true)
+        @Parameter(description = "Second operand", example = "2.5", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "mul");
@@ -112,6 +115,7 @@ public class CalculatorController {
         }
     }
 
+    // DIVISION
     @GetMapping("/div")
     @Operation(
         summary = "Division operation", 
@@ -127,9 +131,9 @@ public class CalculatorController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<Map<String, Object>> division(
-        @Parameter(description = "First operand (dividend)", example = "15.0", required = true)
+        @Parameter(description = "First operand", example = "15.0", required = true)
         @RequestParam(value= "op1", required=true) Double op1,
-        @Parameter(description = "Second operand (divisor) - cannot be zero", example = "3.0", required = true)
+        @Parameter(description = "Second operand - cannot be zero", example = "3.0", required = true)
         @RequestParam(value= "op2", required=true) Double op2
     ) {
         CalculationResponse response = calculatorService.performCalculation(op1, op2, "div");
@@ -141,7 +145,7 @@ public class CalculatorController {
         }
     }
 
-    // Error handler: parameter conversion errors
+    // ERROR HANDLER (parameter conversion errors)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         

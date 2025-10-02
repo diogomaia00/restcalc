@@ -18,14 +18,9 @@ public class CalculationService {
 
     private final Calculator calculator = new Calculator();
 
-    public CalculationService() {
-        System.out.println("🚀 CalculationService initialized - ready to receive Kafka messages");
-    }
-
     @KafkaListener(topics = "calculation-requests", groupId = "calculator-service-group")
     public void handleCalculationRequest(CalculationRequest request) {
-        System.out.println("🔢 Calculator service received request: " + request.getRequestId() + 
-                          " - " + request.getOperand1() + " " + request.getOperation() + " " + request.getOperand2());
+      
         try {
             // Perform the calculation
             var result = calculator.makeOperation(request.getOperand1(), request.getOperand2(), request.getOperation());
@@ -33,7 +28,6 @@ public class CalculationService {
             // Send successful response
             CalculationResponse response = new CalculationResponse(request.getRequestId(), result);
             kafkaTemplate.send(RESPONSE_TOPIC, request.getRequestId(), response);
-            System.out.println("✅ Calculator service sent response: " + request.getRequestId() + " = " + result);
             
         } catch (Exception e) {
             // Send error response

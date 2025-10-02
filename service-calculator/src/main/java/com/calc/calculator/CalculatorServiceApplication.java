@@ -10,7 +10,6 @@ public class CalculatorServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CalculatorServiceApplication.class, args);
-		System.out.println("✅ Calculator Service Application started successfully!");
 	}
 
 }

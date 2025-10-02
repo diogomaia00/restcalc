@@ -2,8 +2,6 @@ description = 'REST API service for calculator'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.fasterxml.jackson.core:jackson-databind'
-	
-	// Swagger/OpenAPI dependencies
+	implementation 'com.fasterxml.jackson.core:jackson-databind'	
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }

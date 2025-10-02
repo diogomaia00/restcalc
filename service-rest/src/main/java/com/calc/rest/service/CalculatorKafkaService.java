@@ -27,6 +27,7 @@ public class CalculatorKafkaService {
     private static final String RESPONSE_TOPIC = "calculation-responses";
 
     public CalculationResponse performCalculation(Double operand1, Double operand2, String operation) {
+        // Unique ID
         String requestId = UUID.randomUUID().toString();
         
         // Create the request
@@ -37,24 +38,8 @@ public class CalculatorKafkaService {
         pendingRequests.put(requestId, future);
         
         try {
-            // Send the request to Kafka
-            System.out.println("📤 REST service sending request: " + requestId + 
-                              " - " + operand1 + " " + operation + " " + operand2);
-            
             // Send message and log the result
-            var sendResult = kafkaTemplate.send(REQUEST_TOPIC, requestId, request);
-            sendResult.whenComplete((result, ex) -> {
-                if (ex == null) {
-                    System.out.println("✅ Message sent successfully to topic: " + REQUEST_TOPIC);
-                    System.out.println("📊 Message details: partition=" + result.getRecordMetadata().partition() + 
-                                     ", offset=" + result.getRecordMetadata().offset());
-                } else {
-                    System.out.println("❌ Failed to send message: " + ex.getMessage());
-                }
-            });
-            
-            // Force flush to ensure message is sent immediately
-            kafkaTemplate.flush();
+            kafkaTemplate.send(REQUEST_TOPIC, requestId, request);
             
             // Wait for response (with timeout)
             return future.get(5, TimeUnit.SECONDS);
@@ -68,12 +53,12 @@ public class CalculatorKafkaService {
 
     @KafkaListener(topics = RESPONSE_TOPIC, groupId = "rest-service-group")
     public void handleCalculationResponse(CalculationResponse response) {
-        System.out.println("📥 REST service received response: " + response.getRequestId() + " = " + response.getResult());
+
         CompletableFuture<CalculationResponse> future = pendingRequests.remove(response.getRequestId());
         if (future != null) {
             future.complete(response);
         } else {
-            System.out.println("⚠️ No pending request found for: " + response.getRequestId());
+            System.out.println(" >>> No pending request found for: " + response.getRequestId());
         }
     }
 }
