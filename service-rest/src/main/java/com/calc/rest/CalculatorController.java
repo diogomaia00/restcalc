@@ -31,7 +31,18 @@ public class CalculatorController {
     @Autowired
     private CalculatorKafkaService calculatorService;
 
-    // ADDICTION
+    // WELCOMING
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> welcoming() {
+        String message = "Possible endpoints: /add, /sub, /mul, /div with parameters op1 and op2. Example: /add?op1=5&op2=2.3";
+        String welcomingRequestId = java.util.UUID.randomUUID().toString();
+
+        return ResponseEntity.ok()
+            .header("request-ID", welcomingRequestId)
+            .body(Map.of("", message));
+    }
+
+    // ADDITION
     @GetMapping("/add")
     @Operation(
         summary = "Addition operation", 
@@ -78,10 +89,18 @@ public class CalculatorController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Subtraction completed successfully",
+             headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
-                examples = @ExampleObject(value = "{\"result\": 7.3}"))),
-        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+                examples = @ExampleObject(value = "{\"result\": 3.8}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Invalid parameters\"}"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")))
     })
     public ResponseEntity<Map<String, Object>> subtraction(
         @Parameter(description = "First operand", example = "10.5", required = true)
@@ -109,10 +128,18 @@ public class CalculatorController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Multiplication completed successfully",
+             headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
-                examples = @ExampleObject(value = "{\"result\": 10.0}"))),
-        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+                examples = @ExampleObject(value = "{\"result\": 3.8}"))),
+        @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
+            content = @Content(mediaType = "application/json",
+                examples = @ExampleObject(value = "{\"message\": \"Invalid parameters\"}"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")))
     })
     public ResponseEntity<Map<String, Object>> multiplication(
         @Parameter(description = "First operand", example = "4.0", required = true)
@@ -140,12 +167,18 @@ public class CalculatorController {
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Division completed successfully",
+             headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
-                examples = @ExampleObject(value = "{\"result\": 5.0}"))),
+                examples = @ExampleObject(value = "{\"result\": 3.8}"))),
         @ApiResponse(responseCode = "400", description = "Bad request - invalid parameters or division by zero",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")),
             content = @Content(mediaType = "application/json",
-                examples = @ExampleObject(value = "{\"message\": \"Division by zero is not allowed\"}"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+                examples = @ExampleObject(value = "{\"message\": \"Invalid parameters\"}"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            headers = @Header(name = "request-ID", description = "Unique request identifier", 
+                schema = @Schema(type = "string", format = "uuid")))
     })
     public ResponseEntity<Map<String, Object>> division(
         @Parameter(description = "First operand", example = "15.0", required = true)

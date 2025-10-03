@@ -106,7 +106,13 @@ cd service-rest
 
 ## API Usage
 
-Once the services are running, the REST API will be available at `http://localhost:8080`.
+Once the services are running:
+
+- REST API will be available at `http://localhost:8080` (check the available endpoints below).
+
+- UI interaction is available through Swagger at `http://localhost:8080/swagger-ui/index.html`
+
+- Kafka monitoring is available at `http://localhost:8081`
 
 ### Available Endpoints
 
@@ -163,8 +169,8 @@ Run tests for a specific service:
 
 ```
 restcalc/
-├── build.gradle                 # Root build configuration
-├── compose.yaml                 # Docker Compose configuration
+├── build.gradle                # Root build configuration
+├── compose.yaml                # Docker Compose configuration
 ├── service-rest/               # REST API service
 │   ├── build.gradle
 │   ├── Dockerfile
