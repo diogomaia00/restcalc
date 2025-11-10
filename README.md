@@ -22,11 +22,9 @@ This project consists of two Spring Boot microservices:
 
 Before building and running this application, ensure you have the following installed:
 
-- **Java 24** or higher
+gi- **Java 24** 
 - **Docker** and **Docker Compose**
 - **Git** (for cloning the repository)
-
-> **Note**: If you're using a different Java version, modify line 13 in `build.gradle` from `languageVersion = JavaLanguageVersion.of(24)` to your Java version.
 
 ## Getting Started
 
